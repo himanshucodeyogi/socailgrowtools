@@ -73,6 +73,12 @@ app.use((err, req, res, _next) => {
   res.status(500).render('error', { message: 'An unexpected error occurred.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+// Local dev server
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+}
+
+// Vercel serverless export
+module.exports = app;
