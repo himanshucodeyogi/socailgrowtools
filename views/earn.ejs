@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — Earn Coins</title>
+  <%- include('partials/head') %>
+  <style>
+    .earn-wrap { max-width: 560px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    /* progress header */
+    .eq-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .eq-counter { font-size: .85rem; font-weight: 600; color: var(--text-muted); }
+    .eq-counter span { color: var(--text); font-weight: 800; font-size: 1rem; }
+
+    .eq-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 9999px; margin: 0 1rem; overflow: hidden; }
+    .eq-bar-fill { height: 100%; background: var(--gold); border-radius: 9999px; transition: width .4s ease; }
+
+    .eq-balance { display: flex; align-items: center; gap: .35rem; background: var(--gold); color: var(--navy); border-radius: 9999px; padding: .3rem .85rem; font-weight: 700; font-size: .85rem; }
+
+    /* task card */
+    .eq-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem;
+      box-shadow: 0 4px 24px rgba(10,15,30,.08);
+      animation: card-in .35s cubic-bezier(.34,1.56,.64,1) both;
+      position: relative; overflow: hidden;
+    }
+    [data-theme="dark"] .eq-card { box-shadow: 0 4px 24px rgba(0,0,0,.35); }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(24px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes card-out {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(-20px) scale(.96); }
+    }
+    .eq-card.leaving { animation: card-out .25s ease forwards; }
+
+    /* card top: platform + type */
+    .eq-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+
+    /* big reward display */
+    .eq-reward {
+      text-align: center; padding: 1.5rem;
+      background: var(--bg); border-radius: 14px; margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    .eq-reward__num {
+      font-size: 3rem; font-weight: 900; letter-spacing: -.04em; color: var(--gold);
+      line-height: 1; display: flex; align-items: center; justify-content: center; gap: .35rem;
+    }
+    [data-theme="light"] .eq-reward__num { color: #92640A; }
+    .eq-reward__lbl { font-size: .78rem; color: var(--text-muted); margin-top: .35rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+
+    /* link display */
+    .eq-link {
+      display: flex; align-items: center; gap: .5rem; padding: .75rem 1rem;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      font-size: .82rem; color: var(--text-muted); margin-bottom: 1.5rem; cursor: pointer;
+      transition: border-color .2s;
+    }
+    .eq-link:hover { border-color: var(--gold); }
+    .eq-link__url { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .eq-link__ico { flex-shrink: 0; color: var(--text-sub); }
+
+    /* meta row */
+    .eq-meta { display: flex; gap: .5rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+
+    /* verify panel */
+    .eq-verify {
+      display: none; text-align: center;
+      background: var(--bg); border: 2px solid var(--gold);
+      border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .eq-verify.show { display: block; animation: card-in .3s ease both; }
+    .eq-verify__countdown {
+      font-size: 4rem; font-weight: 900; letter-spacing: -.05em;
+      color: var(--gold); line-height: 1; margin-bottom: .35rem;
+      transition: color .3s;
+    }
+    [data-theme="light"] .eq-verify__countdown { color: #92640A; }
+    .eq-verify__countdown.done { color: var(--success); }
+    .eq-verify__status { font-size: .85rem; color: var(--text-muted); }
+    .eq-verify__spinner { width: 22px; height: 22px; border: 2.5px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; margin: .75rem auto 0; display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* action buttons */
+    .eq-actions { display: flex; gap: .75rem; }
+    .eq-btn-start {
+      flex: 1; padding: .85rem; border-radius: 12px; font-family: inherit;
+      font-size: .95rem; font-weight: 700; cursor: pointer; border: none;
+      background: var(--gold); color: var(--navy);
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+    .eq-btn-start:hover { background: #FCCF2A; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(245,197,24,.35); }
+    .eq-btn-start:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .eq-btn-skip {
+      padding: .85rem 1.25rem; border-radius: 12px; font-family: inherit;
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      background: var(--bg); border: 1.5px solid var(--border); color: var(--text-muted);
+      transition: border-color .2s, color .2s;
+    }
+    .eq-btn-skip:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* success overlay */
+    .eq-success {
+      display: none; text-align: center; padding: 1.5rem;
+      background: rgba(16,185,129,.08); border: 2px solid var(--success);
+      border-radius: 14px; margin-bottom: 1.5rem; animation: card-in .3s ease both;
+    }
+    .eq-success.show { display: block; }
+    .eq-success__icon { font-size: 2.5rem; margin-bottom: .5rem; }
+    .eq-success__text { font-weight: 700; color: var(--success); font-size: 1.1rem; }
+    .eq-success__sub  { font-size: .85rem; color: var(--text-muted); margin-top: .25rem; }
+
+    /* empty state */
+    .eq-empty { text-align: center; padding: 4rem 2rem; }
+    .eq-empty__icon { font-size: 3rem; margin-bottom: 1rem; }
+    .eq-empty__title { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
+    .eq-empty__desc  { color: var(--text-muted); font-size: .9rem; }
+    .eq-empty__desc a { color: var(--gold); font-weight: 600; }
+    [data-theme="light"] .eq-empty__desc a { color: #92640A; }
+
+    /* all done */
+    .eq-done { text-align: center; padding: 3rem 1.5rem; }
+    .eq-done__icon { font-size: 3.5rem; margin-bottom: 1rem; animation: bounce .6s ease both; }
+    @keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+    .eq-done__title { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: .5rem; }
+    .eq-done__sub   { font-size: .9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    @media (max-width: 480px) {
+      .eq-reward__num { font-size: 2.25rem; }
+      .eq-actions { flex-direction: column; }
+      .eq-btn-skip { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar', { activePage: 'earn' }) %>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Earn Coins</h1>
+          <p class="page-subtitle">Complete tasks one by one. Stay on the link for 4 seconds to verify.</p>
+        </div>
+      </div>
+
+      <div class="earn-wrap">
+
+        <% if (campaigns.length === 0) { %>
+          <div class="eq-empty">
+            <div class="eq-empty__icon">📋</div>
+            <div class="eq-empty__title">No tasks available right now</div>
+            <p class="eq-empty__desc">Check back soon, or <a href="/boost">create a campaign</a> to attract others.</p>
+          </div>
+
+        <% } else { %>
+
+          <!-- Progress header -->
+          <div class="eq-header">
+            <div class="eq-counter">Task <span id="eq-current">1</span> of <span><%= campaigns.length %></span></div>
+            <div class="eq-bar-wrap"><div class="eq-bar-fill" id="eq-bar" style="width:<%= campaigns.length > 0 ? (1/campaigns.length*100).toFixed(1) : 0 %>%"></div></div>
+            <div class="eq-balance" id="eq-balance">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+              <span id="eq-coins"><%= user.coins %></span>
+            </div>
+          </div>
+
+          <!-- Task card container -->
+          <div id="eq-card-wrap">
+            <!-- Rendered by JS from the tasks array below -->
+          </div>
+
+          <!-- All done state (hidden initially) -->
+          <div id="eq-done" style="display:none" class="card eq-done">
+            <div class="eq-done__icon">🎉</div>
+            <div class="eq-done__title">All tasks completed!</div>
+            <p class="eq-done__sub">You've gone through all available tasks. Check back later for more.</p>
+            <a href="/dashboard" class="btn btn-gold">Go to Dashboard</a>
+          </div>
+
+        <% } %>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Pass campaign data to JS -->
+  <script>
+    var EQ_TASKS = <%- JSON.stringify(campaigns.map(c => ({
+      id:     c._id.toString(),
+      url:    c.targetUrl,
+      type:   c.taskType,
+      platform: c.platform,
+      reward: c.coinRewardPerTask,
+      slots:  Math.floor(c.remainingBudget / c.coinRewardPerTask),
+      done:   c.completedBy.length
+    }))) %>;
+    var EQ_TOTAL = EQ_TASKS.length;
+  </script>
+  <script src="/js/earn.js"></script>
+</body>
+</html>

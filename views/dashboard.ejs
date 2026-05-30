@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — Dashboard</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar', { activePage: 'dashboard' }) %>
+
+  <main class="page-wrapper">
+    <div class="container">
+
+      <% if (flash) { %>
+        <div class="alert alert-success" style="margin-top: 1.5rem"><%= flash %></div>
+      <% } %>
+
+      <% if (user.flagged) { %>
+        <div class="alert alert-error" style="margin-top: 1.5rem">
+          <strong>Account Restricted:</strong> <%= user.flagReason || 'Suspicious activity detected.' %>
+          You can still earn coins to recover your balance, but cannot create new campaigns.
+        </div>
+      <% } %>
+
+      <!-- Balance Hero -->
+      <div class="hero-card" style="margin-top: 2rem">
+        <div class="hero-card__eyebrow">Your Balance</div>
+        <div class="hero-balance">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#F5C518" style="vertical-align:middle;margin-right:8px"><circle cx="12" cy="12" r="10"/></svg>
+          <%= user.coins %> <span style="font-size:1.5rem;opacity:.7">coins</span>
+        </div>
+        <div class="hero-card__sub">@<%= user.username %> &middot; <%= user.platform %></div>
+      </div>
+
+      <!-- Action Cards -->
+      <div class="grid-2" style="margin-top: 2rem">
+        <a href="/earn" class="action-card card">
+          <div class="action-card__icon" style="background: #ECFDF5; color: #10B981;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <h2 class="action-card__title">Earn Coins</h2>
+          <p class="action-card__desc">Complete tasks for other users and earn coins. Like, follow, or subscribe — it takes seconds.</p>
+          <span class="btn btn-gold btn-sm" style="margin-top:auto">Browse Tasks &rarr;</span>
+        </a>
+
+        <a href="/boost" class="action-card card">
+          <div class="action-card__icon" style="background: #EFF6FF; color: #3B82F6;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h2 class="action-card__title">Boost My Account</h2>
+          <p class="action-card__desc">Spend your coins to get likes, followers, and subscribers on your YouTube or Instagram.</p>
+          <span class="btn btn-primary btn-sm" style="margin-top:auto">Create Campaign &rarr;</span>
+        </a>
+      </div>
+
+      <!-- Recent Transactions -->
+      <% if (recentTransactions.length > 0) { %>
+        <div class="card" style="margin-top: 2rem">
+          <h3 style="margin:0 0 1rem;font-size:1rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600">Recent Activity</h3>
+          <div class="tx-list">
+            <% recentTransactions.forEach(tx => { %>
+              <div class="tx-item">
+                <span class="tx-item__icon <%= tx.type %>">
+                  <% if (tx.type === 'earned') { %>+<% } else if (tx.type === 'spent') { %>-<% } else { %>&#x26A0;<% } %>
+                </span>
+                <div class="tx-item__info">
+                  <span class="tx-item__desc"><%= tx.description || tx.type %></span>
+                  <span class="tx-item__date"><%= new Date(tx.createdAt).toLocaleDateString() %></span>
+                </div>
+                <span class="tx-item__amount <%= tx.type %>">
+                  <% if (tx.type === 'earned') { %>+<% } else { %>-<% } %><%= tx.amount %>
+                </span>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Stats row -->
+      <div class="grid-3" style="margin-top:2rem;margin-bottom:3rem">
+        <div class="stat-card card">
+          <div class="stat-card__value"><%= user.completedTaskIds.length %></div>
+          <div class="stat-card__label">Tasks Completed</div>
+        </div>
+        <div class="stat-card card">
+          <div class="stat-card__value"><%= user.coins %></div>
+          <div class="stat-card__label">Coins Available</div>
+        </div>
+        <div class="stat-card card">
+          <div class="stat-card__value" style="font-size:1.25rem;text-transform:capitalize"><%= user.platform %></div>
+          <div class="stat-card__label">Platform</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <% if (isNewUser) { %>
+    <div class="modal-overlay" id="welcome-modal">
+      <div class="modal card">
+        <div class="modal__icon">&#x1FA99;</div>
+        <h2 class="modal__title">Welcome to CoinBoost!</h2>
+        <p>You've received <span class="coin-badge">20 coins</span> to get started.</p>
+        <p style="color:var(--color-text-muted);font-size:.9rem;margin-top:.5rem">Complete tasks to earn more coins, or use your balance to boost your content.</p>
+        <div class="modal__actions">
+          <a href="/earn" class="btn btn-gold">Start Earning</a>
+          <a href="/boost" class="btn btn-outline">Boost My Content</a>
+        </div>
+        <button class="modal__close" onclick="document.getElementById('welcome-modal').remove()" aria-label="Close">&times;</button>
+      </div>
+    </div>
+  <% } %>
+</body>
+</html>

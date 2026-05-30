@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — Login</title>
+  <%- include('partials/head') %>
+</head>
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card card">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">&#x1FA99;</span>
+        <h1 class="auth-title">CoinBoost</h1>
+        <p class="auth-subtitle">Free · No Ads · No Password</p>
+      </div>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <span class="auth-feature-icon">&#x1F4B0;</span>
+          <span>Earn coins by completing tasks</span>
+        </div>
+        <div class="auth-feature">
+          <span class="auth-feature-icon">&#x1F680;</span>
+          <span>Boost your YouTube &amp; Instagram</span>
+        </div>
+        <div class="auth-feature">
+          <span class="auth-feature-icon">&#x1F381;</span>
+          <span>20 free coins on signup</span>
+        </div>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <form action="/login" method="POST" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="handle">Instagram handle or YouTube channel URL</label>
+          <input
+            type="text"
+            id="handle"
+            name="handle"
+            class="form-input"
+            placeholder="@yourhandle or https://youtube.com/@channel"
+            autocomplete="off"
+            autofocus
+            required
+          />
+          <div class="form-hint" style="display:flex;flex-direction:column;gap:.25rem;margin-top:.35rem">
+            <span>📸 <strong>Instagram:</strong> enter <code>@yourhandle</code> or just <code>yourhandle</code></span>
+            <span>▶️ <strong>YouTube:</strong> paste full URL like <code>https://youtube.com/@channel</code></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold btn-full btn-lg">
+          Enter Platform &rarr;
+        </button>
+      </form>
+
+      <p class="auth-disclaimer">
+        By entering, you agree to our <a href="#">Terms</a>. This platform is 100% free, ad-free, and community-powered.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

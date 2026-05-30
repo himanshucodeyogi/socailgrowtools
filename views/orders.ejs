@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — My Orders</title>
+  <%- include('partials/head') %>
+  <style>
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
+    .tab-btn {
+      padding: .75rem 1.5rem; font-family: var(--font-sans); font-size: .9rem; font-weight: 600;
+      background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
+      cursor: pointer; color: var(--text-muted); transition: color .2s, border-color .2s;
+    }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--gold); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .order-table { width: 100%; border-collapse: collapse; }
+    .order-table th {
+      text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--text-muted); font-weight: 600; padding: .625rem 1rem;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .order-table td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: .875rem; vertical-align: middle; color: var(--text); }
+    .order-table tr:last-child td { border-bottom: none; }
+    .order-table tr:hover td { background: var(--bg-elevated); }
+
+    .status-badge { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .65rem; border-radius: 9999px; font-size: .72rem; font-weight: 700; }
+    .status-active   { background: #ECFDF5; color: #065F46; }
+    .status-inactive { background: var(--bg-elevated); color: var(--text-muted); }
+    [data-theme="dark"] .status-active { background: rgba(16,185,129,.15); color: #6EE7B7; }
+
+    .progress-bar-wrap { background: var(--border); border-radius: 9999px; height: 6px; width: 100px; overflow: hidden; }
+    .progress-bar-fill  { height: 100%; background: var(--gold); border-radius: 9999px; transition: width .4s ease; }
+
+    .url-cell { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted); font-size: .78rem; }
+    .url-cell:hover { color: var(--gold); }
+
+    .earn-row__coin { color: var(--success); font-weight: 700; }
+
+    .summary-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem; }
+    .summary-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; text-align: center; }
+    .summary-item__val { font-size: 1.75rem; font-weight: 800; color: var(--text); letter-spacing: -.03em; }
+    .summary-item__lbl { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-top: .2rem; }
+
+    .empty-msg { text-align: center; padding: 3rem; color: var(--text-muted); }
+    .empty-msg a { color: var(--gold); font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .summary-bar { grid-template-columns: repeat(2,1fr); }
+      .order-table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+    @media (max-width: 480px) { .summary-bar { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar', { activePage: 'orders' }) %>
+
+  <main class="page-wrapper">
+    <div class="container">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Orders</h1>
+          <p class="page-subtitle">Track your boost campaigns and completed tasks.</p>
+        </div>
+      </div>
+
+      <%
+        const totalSpent   = myCampaigns.reduce((s, c) => s + c.totalBudget, 0);
+        const totalEarned  = completedTxns.reduce((s, t) => s + t.amount, 0);
+        const totalSlotsDone = myCampaigns.reduce((s, c) => s + c.completedBy.length, 0);
+      %>
+      <div class="summary-bar">
+        <div class="summary-item">
+          <div class="summary-item__val"><%= myCampaigns.length %></div>
+          <div class="summary-item__lbl">Campaigns Created</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-item__val"><%= totalSlotsDone %></div>
+          <div class="summary-item__lbl">Total Engagements</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-item__val"><%= completedTxns.length %></div>
+          <div class="summary-item__lbl">Tasks Completed</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('campaigns', this)">
+          My Campaigns
+          <% if (myCampaigns.length > 0) { %>
+            (<%= myCampaigns.length %>)
+          <% } %>
+        </button>
+        <button class="tab-btn" onclick="switchTab('earned', this)">
+          Completed Tasks
+          <% if (completedTxns.length > 0) { %>
+            (<%= completedTxns.length %>)
+          <% } %>
+        </button>
+      </div>
+
+      <!-- Tab: My Campaigns -->
+      <div id="tab-campaigns" class="tab-panel active">
+        <% if (myCampaigns.length === 0) { %>
+          <div class="empty-msg">
+            <p style="font-size:2rem;margin-bottom:.5rem">&#x1F4CB;</p>
+            <p>No campaigns yet. <a href="/boost">Create your first boost &rarr;</a></p>
+          </div>
+        <% } else { %>
+          <div class="card" style="padding:0;overflow:hidden">
+            <table class="order-table">
+              <thead>
+                <tr>
+                  <th>Platform / Type</th>
+                  <th>Link</th>
+                  <th>Reward</th>
+                  <th>Progress</th>
+                  <th>Budget Used</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% myCampaigns.forEach(c => {
+                  const totalSlots  = Math.floor(c.totalBudget / c.coinRewardPerTask);
+                  const doneSlots   = c.completedBy.length;
+                  const pct         = totalSlots > 0 ? Math.round((doneSlots / totalSlots) * 100) : 0;
+                  const budgetUsed  = doneSlots * c.coinRewardPerTask;
+                %>
+                <tr>
+                  <td>
+                    <span class="badge badge-<%= c.platform %>" style="margin-bottom:.3rem;display:block;width:fit-content">
+                      <%= c.platform === 'youtube' ? '▶ YouTube' : '📸 Instagram' %>
+                    </span>
+                    <span class="pill pill-<%= c.taskType %>"><%= c.taskType.charAt(0).toUpperCase() + c.taskType.slice(1) %></span>
+                  </td>
+                  <td>
+                    <a href="<%= c.targetUrl %>" target="_blank" rel="noopener" class="url-cell" title="<%= c.targetUrl %>">
+                      <%= c.targetUrl.length > 35 ? c.targetUrl.substring(0, 35) + '…' : c.targetUrl %>
+                    </a>
+                  </td>
+                  <td>
+                    <span style="color:var(--gold-text);font-weight:700">&#x1FA99; <%= c.coinRewardPerTask %></span>
+                    <span style="color:var(--color-text-muted);font-size:.75rem">/task</span>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:.5rem">
+                      <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" style="width:<%= pct %>%"></div>
+                      </div>
+                      <span style="font-size:.75rem;color:var(--color-text-muted)"><%= doneSlots %>/<%= totalSlots %></span>
+                    </div>
+                  </td>
+                  <td>
+                    <span style="font-weight:600"><%= budgetUsed %></span>
+                    <span style="color:var(--color-text-muted)">/ <%= c.totalBudget %></span>
+                  </td>
+                  <td>
+                    <% if (c.isActive) { %>
+                      <span class="status-badge status-active">&#x25CF; Active</span>
+                    <% } else { %>
+                      <span class="status-badge status-inactive">&#x25A0; Done</span>
+                    <% } %>
+                  </td>
+                  <td style="color:var(--color-text-muted);font-size:.78rem;white-space:nowrap">
+                    <%= new Date(c.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) %>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Tab: Completed Tasks -->
+      <div id="tab-earned" class="tab-panel">
+        <% if (completedTxns.length === 0) { %>
+          <div class="empty-msg">
+            <p style="font-size:2rem;margin-bottom:.5rem">&#x1F4B0;</p>
+            <p>No completed tasks yet. <a href="/earn">Browse tasks &rarr;</a></p>
+          </div>
+        <% } else { %>
+          <div class="card" style="padding:0;overflow:hidden">
+            <table class="order-table">
+              <thead>
+                <tr>
+                  <th>Platform / Type</th>
+                  <th>Link</th>
+                  <th>Coins Earned</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% completedTxns.forEach(t => {
+                  const c = t.campaignId;
+                %>
+                <tr>
+                  <td>
+                    <% if (c) { %>
+                      <span class="badge badge-<%= c.platform %>" style="margin-bottom:.3rem;display:block;width:fit-content">
+                        <%= c.platform === 'youtube' ? '▶ YouTube' : '📸 Instagram' %>
+                      </span>
+                      <span class="pill pill-<%= c.taskType %>"><%= c.taskType.charAt(0).toUpperCase() + c.taskType.slice(1) %></span>
+                    <% } else { %>
+                      <span style="color:var(--color-text-muted)">—</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (c && c.targetUrl) { %>
+                      <a href="<%= c.targetUrl %>" target="_blank" rel="noopener" class="url-cell" title="<%= c.targetUrl %>">
+                        <%= c.targetUrl.length > 35 ? c.targetUrl.substring(0, 35) + '…' : c.targetUrl %>
+                      </a>
+                    <% } else { %>
+                      <span style="color:var(--color-text-muted)">—</span>
+                    <% } %>
+                  </td>
+                  <td class="earn-row__coin">+<%= t.amount %> &#x1FA99;</td>
+                  <td style="color:var(--color-text-muted);font-size:.78rem;white-space:nowrap">
+                    <%= new Date(t.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) %>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

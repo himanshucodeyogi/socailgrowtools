@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — Boost My Account</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar', { activePage: 'boost' }) %>
+
+  <main class="page-wrapper">
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Boost My Account</h1>
+          <p class="page-subtitle">Spend coins to get real engagement on your content.</p>
+        </div>
+        <span class="coin-badge coin-badge--lg">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+          <%= user.coins %> coins available
+        </span>
+      </div>
+
+      <% if (user.flagged) { %>
+        <div class="alert alert-error">
+          Your account is restricted from creating campaigns. Earn coins to restore access.
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <div class="boost-layout">
+        <form action="/boost" method="POST" class="card boost-form" id="boost-form">
+
+          <div class="form-group">
+            <label class="form-label" for="targetUrl">Your YouTube or Instagram URL</label>
+            <input
+              type="url"
+              id="targetUrl"
+              name="targetUrl"
+              class="form-input"
+              placeholder="https://youtube.com/@yourchannel or https://instagram.com/p/..."
+              value="<%= formData.targetUrl || '' %>"
+              <%= user.flagged ? 'disabled' : '' %>
+              required
+            />
+            <span class="form-hint" id="platform-detect"></span>
+          </div>
+
+          <div class="form-group" id="task-type-group">
+            <label class="form-label">Task Type</label>
+            <div class="task-type-options" id="task-type-options">
+              <!-- Populated by JS based on platform detection -->
+              <label class="task-type-option <%= formData.taskType === 'like' ? 'selected' : '' %>">
+                <input type="radio" name="taskType" value="like" <%= formData.taskType === 'like' ? 'checked' : '' %> /> Like
+              </label>
+              <label class="task-type-option <%= formData.taskType === 'follow' ? 'selected' : '' %>">
+                <input type="radio" name="taskType" value="follow" <%= formData.taskType === 'follow' ? 'checked' : '' %> /> Follow
+              </label>
+              <label class="task-type-option <%= formData.taskType === 'subscribe' ? 'selected' : '' %>">
+                <input type="radio" name="taskType" value="subscribe" <%= formData.taskType === 'subscribe' ? 'checked' : '' %> /> Subscribe
+              </label>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label" for="coinRewardPerTask">Coins per task</label>
+              <input
+                type="number"
+                id="coinRewardPerTask"
+                name="coinRewardPerTask"
+                class="form-input"
+                min="1"
+                max="50"
+                value="<%= formData.coinRewardPerTask || '5' %>"
+                <%= user.flagged ? 'disabled' : '' %>
+                required
+              />
+              <span class="form-hint">1–50 coins. Higher = more attractive to earners.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="totalBudget">Total coin budget</label>
+              <input
+                type="number"
+                id="totalBudget"
+                name="totalBudget"
+                class="form-input"
+                min="1"
+                max="<%= user.coins %>"
+                value="<%= formData.totalBudget || '' %>"
+                <%= user.flagged ? 'disabled' : '' %>
+                required
+              />
+              <span class="form-hint">Max: <%= user.coins %> coins. Budget ÷ reward = slots.</span>
+            </div>
+          </div>
+
+          <!-- Budget preview -->
+          <div class="budget-preview" id="budget-preview" style="display:none">
+            <div class="budget-preview__item">
+              <span>Task slots</span>
+              <strong id="preview-slots">—</strong>
+            </div>
+            <div class="budget-preview__item">
+              <span>Coins to deduct</span>
+              <strong id="preview-cost">—</strong>
+            </div>
+            <div class="budget-preview__item">
+              <span>Remaining balance</span>
+              <strong id="preview-balance">—</strong>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" <%= user.flagged ? 'disabled' : '' %> style="margin-top:1.5rem">
+            Create Campaign
+          </button>
+        </form>
+
+        <!-- Info sidebar -->
+        <div class="boost-info">
+          <div class="card boost-info__card">
+            <h3>How it works</h3>
+            <ol class="boost-steps">
+              <li>Paste your content URL</li>
+              <li>Choose what you want — likes, follows, or subscribes</li>
+              <li>Set your budget. Coins are deducted immediately.</li>
+              <li>Other users see your campaign and complete it</li>
+              <li>You get real engagement — one task at a time</li>
+            </ol>
+          </div>
+          <div class="card boost-info__card" style="margin-top:1rem">
+            <h3>Supported platforms</h3>
+            <div class="platform-list">
+              <div class="platform-item">
+                <span class="badge badge-youtube">&#x25B6; YouTube</span>
+                <span>Like &middot; Subscribe</span>
+              </div>
+              <div class="platform-item">
+                <span class="badge badge-instagram">&#x1F4F8; Instagram</span>
+                <span>Like &middot; Follow</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    window.__userCoins = <%= user.coins %>;
+  </script>
+  <script src="/js/boost.js"></script>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CoinBoost — Free Social Media Growth Exchange</title>
+  <%- include('partials/head') %>
+  <style>
+    /* ── Home page inherits global vars from style.css ── */
+
+    body { background: var(--h-bg); color: var(--h-text); transition: background .3s, color .3s; }
+
+    /* ── Light home vars ── */
+    :root {
+      --h-bg:              #FFFFFF;
+      --h-surface:         #F8F9FB;
+      --h-card:            #FFFFFF;
+      --h-border:          rgba(10,15,30,.09);
+      --h-text:            #0A0F1E;
+      --h-muted:           rgba(10,15,30,.5);
+      --h-sub:             rgba(10,15,30,.35);
+      --h-hero-bg:         linear-gradient(160deg, #EFF6FF 0%, #F5F0FF 50%, #FFF7E6 100%);
+      --h-hero-text:       #0A0F1E;
+      --h-hero-sub:        rgba(10,15,30,.55);
+      --h-orb-op:          0.09;
+      --h-grid-op:         0.25;
+      --h-tag-bg:          rgba(245,197,24,.15);
+      --h-tag-border:      rgba(245,197,24,.35);
+      --h-tag-text:        #92640A;
+      --h-nav-bg:          rgba(255,255,255,.85);
+      --h-nav-border:      rgba(10,15,30,.1);
+      --h-nav-text:        rgba(10,15,30,.65);
+      --h-nav-hover:       #0A0F1E;
+      --h-nav-logo:        #0A0F1E;
+      --h-stats-bg:        rgba(10,15,30,.03);
+      --h-stats-border:    rgba(10,15,30,.08);
+      --h-stats-val:       #0A0F1E;
+      --h-stats-lbl:       rgba(10,15,30,.45);
+      --h-stats-div:       rgba(10,15,30,.08);
+      --h-tl-line:         rgba(10,15,30,.12);
+      --h-tl-desc:         rgba(10,15,30,.5);
+      --h-feat-bg:         #FFFFFF;
+      --h-feat-border:     rgba(10,15,30,.13);
+      --h-feat-hover:      #F8F9FB;
+      --h-feat-desc:       rgba(10,15,30,.5);
+      --h-plat-tag-bg:     rgba(255,255,255,.2);
+      --h-plat-tag-text:   #fff;
+      --h-plat-glow-op:    0.4;
+      --h-econ-bg:         #F8F9FB;
+      --h-econ-text:       #0A0F1E;
+      --h-econ-sub:        rgba(10,15,30,.5);
+      --h-eitem-bg:        rgba(10,15,30,.04);
+      --h-eitem-hover:     rgba(10,15,30,.07);
+      --h-eitem-label:     rgba(10,15,30,.7);
+      --h-eitem-border:    rgba(10,15,30,.07);
+      --h-cta-box:         linear-gradient(135deg,rgba(245,197,24,.1),rgba(245,197,24,.03));
+      --h-cta-box-border:  rgba(245,197,24,.2);
+      --h-profile-card-bg: rgba(10,15,30,.05);
+      --h-profile-card-b:  rgba(10,15,30,.1);
+      --h-profile-name:    #0A0F1E;
+      --h-ghost-bg:        rgba(10,15,30,.07);
+      --h-ghost-border:    rgba(10,15,30,.15);
+      --h-ghost-text:      rgba(10,15,30,.7);
+      --h-scroll-color:    rgba(10,15,30,.25);
+      --h-footer-bg:       #0A0F1E;
+      --h-footer-text:     rgba(255,255,255,.4);
+      --h-footer-head:     rgba(255,255,255,.4);
+      --h-footer-link:     rgba(255,255,255,.5);
+      --h-footer-copy:     rgba(255,255,255,.3);
+      --h-footer-badge:    rgba(255,255,255,.05);
+    }
+
+    /* ── Dark home vars ── */
+    [data-theme="dark"] {
+      --h-bg:              #06080F;
+      --h-surface:         #0C0F1A;
+      --h-card:            #131726;
+      --h-border:          rgba(255,255,255,.08);
+      --h-text:            #F0F2F8;
+      --h-muted:           rgba(240,242,248,.5);
+      --h-sub:             rgba(240,242,248,.28);
+      --h-hero-bg:         linear-gradient(160deg,#06080F 0%,#0C0F1A 100%);
+      --h-hero-text:       #F0F2F8;
+      --h-hero-sub:        rgba(240,242,248,.55);
+      --h-orb-op:          0.35;
+      --h-grid-op:         0.04;
+      --h-tag-bg:          rgba(245,197,24,.12);
+      --h-tag-border:      rgba(245,197,24,.25);
+      --h-tag-text:        #F5C518;
+      --h-nav-bg:          rgba(6,8,15,.85);
+      --h-nav-border:      rgba(255,255,255,.08);
+      --h-nav-text:        rgba(255,255,255,.6);
+      --h-nav-hover:       #fff;
+      --h-nav-logo:        #fff;
+      --h-stats-bg:        rgba(255,255,255,.03);
+      --h-stats-border:    rgba(255,255,255,.07);
+      --h-stats-val:       #fff;
+      --h-stats-lbl:       rgba(255,255,255,.4);
+      --h-stats-div:       rgba(255,255,255,.08);
+      --h-tl-line:         rgba(245,197,24,.25);
+      --h-tl-desc:         rgba(240,242,248,.45);
+      --h-feat-bg:         #0C0F1A;
+      --h-feat-border:     rgba(255,255,255,.07);
+      --h-feat-hover:      #10142A;
+      --h-feat-desc:       rgba(240,242,248,.4);
+      --h-plat-tag-bg:     rgba(255,255,255,.15);
+      --h-plat-tag-text:   #fff;
+      --h-plat-glow-op:    0.55;
+      --h-econ-bg:         #0C0F1A;
+      --h-econ-text:       #F0F2F8;
+      --h-econ-sub:        rgba(240,242,248,.45);
+      --h-eitem-bg:        rgba(255,255,255,.04);
+      --h-eitem-hover:     rgba(255,255,255,.07);
+      --h-eitem-label:     rgba(240,242,248,.7);
+      --h-eitem-border:    rgba(255,255,255,.07);
+      --h-cta-box:         linear-gradient(135deg,rgba(245,197,24,.1),rgba(245,197,24,.03));
+      --h-cta-box-border:  rgba(245,197,24,.2);
+      --h-profile-card-bg: rgba(255,255,255,.05);
+      --h-profile-card-b:  rgba(255,255,255,.1);
+      --h-profile-name:    #fff;
+      --h-ghost-bg:        rgba(255,255,255,.08);
+      --h-ghost-border:    rgba(255,255,255,.15);
+      --h-ghost-text:      rgba(255,255,255,.8);
+      --h-scroll-color:    rgba(255,255,255,.25);
+      --h-footer-bg:       #06080F;
+      --h-footer-text:     rgba(255,255,255,.35);
+      --h-footer-head:     rgba(255,255,255,.35);
+      --h-footer-link:     rgba(255,255,255,.5);
+      --h-footer-copy:     rgba(255,255,255,.25);
+      --h-footer-badge:    rgba(255,255,255,.05);
+    }
+
+    /* ════════════════════════════════
+       NAVBAR
+    ════════════════════════════════ */
+    .hn { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 1.5rem; transition: background .3s, border-color .3s, backdrop-filter .3s; border-bottom: 1px solid transparent; }
+    .hn.scrolled { background: var(--h-nav-bg); backdrop-filter: blur(20px); border-bottom-color: var(--h-nav-border); }
+    .hn__inner { max-width: 1140px; margin: 0 auto; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .hn__logo { display: flex; align-items: center; gap: .5rem; font-size: 1.15rem; font-weight: 800; letter-spacing: -.02em; color: var(--h-nav-logo); transition: color .2s; text-decoration: none; }
+    .hn__logo:hover { text-decoration: none; opacity: .85; }
+    .hn__logo-box { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#F5C518,#D4A017); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .hn__links { display: flex; align-items: center; gap: 2rem; }
+    .hn__links a { font-size: .875rem; font-weight: 500; color: var(--h-nav-text); transition: color .2s; text-decoration: none; }
+    .hn__links a:hover { color: var(--h-nav-hover); text-decoration: none; }
+    .hn__right { display: flex; align-items: center; gap: .75rem; }
+
+    /* home-page theme toggle (different bg from dark navbar toggle) */
+    .hn__toggle {
+      width: 36px; height: 36px; border-radius: 8px; cursor: pointer; border: 1px solid var(--h-nav-border);
+      background: var(--h-ghost-bg); color: var(--h-nav-text); transition: background .2s, color .2s, border-color .2s;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .hn__toggle:hover { background: var(--h-ghost-border); color: var(--h-nav-hover); }
+
+    .hbtn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; padding: .5rem 1.1rem; border-radius: 8px; font-family: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; white-space: nowrap; text-decoration: none; }
+    .hbtn:hover { text-decoration: none; }
+    .hbtn-gold { background: #F5C518; color: #0A0F1E; }
+    .hbtn-gold:hover { background: #FCCF2A; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(245,197,24,.3); }
+    .hbtn-ghost { background: var(--h-ghost-bg); color: var(--h-ghost-text); border: 1px solid var(--h-ghost-border); }
+    .hbtn-ghost:hover { opacity: .85; }
+    .hbtn-dark { background: #0A0F1E; color: #fff; }
+    .hbtn-dark:hover { background: #141c30; transform: translateY(-1px); }
+    .hbtn-lg { padding: .75rem 1.75rem; font-size: .95rem; border-radius: 10px; }
+    .hbtn-sm { padding: .4rem .9rem; font-size: .8rem; }
+
+    .hcoin { display: inline-flex; align-items: center; gap: .35rem; background: var(--h-tag-bg); border: 1px solid var(--h-tag-border); color: var(--h-tag-text); border-radius: 9999px; padding: .3rem .85rem; font-size: .8rem; font-weight: 700; }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 7rem 1.5rem 5rem; position: relative; overflow: hidden; text-align: center; background: var(--h-hero-bg); transition: background .3s; }
+    .hero__mesh { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(var(--h-border) 1px, transparent 1px), linear-gradient(90deg, var(--h-border) 1px, transparent 1px); background-size: 60px 60px; opacity: var(--h-grid-op); }
+    .hero__glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(245,197,24,.13) 0%, transparent 65%); }
+    .orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: var(--h-orb-op); animation: float 8s ease-in-out infinite; }
+    .orb-1 { width: 320px; height: 320px; background: #F5C518; top: 8%; right: 3%; }
+    .orb-2 { width: 220px; height: 220px; background: #6366F1; bottom: 12%; left: 2%; animation-delay: -3s; }
+    .orb-3 { width: 160px; height: 160px; background: #EC4899; top: 55%; right: 18%; animation-delay: -5s; }
+    @keyframes float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-18px) scale(1.04)} }
+
+    .hero__inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
+
+    .htag { display: inline-flex; align-items: center; gap: .5rem; background: var(--h-tag-bg); border: 1px solid var(--h-tag-border); color: var(--h-tag-text); border-radius: 9999px; padding: .4rem 1rem; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2rem; animation: fade-up .6s ease both; }
+    .htag-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .htitle { font-size: clamp(2.4rem,6vw,4.25rem); font-weight: 900; letter-spacing: -.05em; line-height: 1.05; margin-bottom: 1.25rem; color: var(--h-hero-text); animation: fade-up .6s .1s ease both; }
+    .htitle .grad { background: linear-gradient(135deg,#D97706 0%,#B45309 50%,#92400E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    [data-theme="dark"] .htitle .grad { background: linear-gradient(135deg,#F5C518 0%,#FBBF24 45%,#F59E0B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .hsub { font-size: 1.1rem; color: var(--h-hero-sub); line-height: 1.7; max-width: 540px; margin: 0 auto 2.5rem; animation: fade-up .6s .2s ease both; }
+
+    @keyframes fade-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    .hcta { display: flex; gap: .875rem; justify-content: center; flex-wrap: wrap; animation: fade-up .6s .3s ease both; }
+
+    /* profile card */
+    .pcard { display: inline-flex; align-items: center; gap: 1.5rem; background: var(--h-profile-card-bg); border: 1px solid var(--h-profile-card-b); border-radius: 20px; padding: 1.5rem 2rem; margin-top: 2rem; text-align: left; max-width: 560px; width: 100%; backdrop-filter: blur(20px); animation: fade-up .6s .3s ease both; box-shadow: 0 8px 40px rgba(0,0,0,.1); }
+    .pcard__av { width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg,#F5C518,#D4A017); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; color: #0A0F1E; text-transform: uppercase; box-shadow: 0 4px 12px rgba(245,197,24,.35); }
+    .pcard__body { flex: 1; min-width: 0; }
+    .pcard__name { font-size: 1rem; font-weight: 700; color: var(--h-profile-name); }
+    .pcard__plat { font-size: .75rem; color: var(--h-muted); margin-top: .15rem; }
+    .pcard__coins { display: inline-flex; align-items: center; gap: .35rem; background: rgba(245,197,24,.18); color: #D4A017; border-radius: 9999px; padding: .2rem .7rem; font-size: .78rem; font-weight: 700; margin-top: .5rem; }
+    [data-theme="dark"] .pcard__coins { color: #F5C518; }
+    .pcard__acts { display: flex; flex-direction: column; gap: .4rem; flex-shrink: 0; }
+
+    /* scroll hint */
+    .hscroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .5rem; color: var(--h-scroll-color); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+    .hscroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--h-scroll-color), transparent); animation: sline 2s ease-in-out infinite; }
+    @keyframes sline { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+    /* ════════════════════════════════
+       STATS
+    ════════════════════════════════ */
+    .hstats { background: var(--h-stats-bg); border-top: 1px solid var(--h-stats-border); border-bottom: 1px solid var(--h-stats-border); padding: 1.5rem; transition: background .3s; }
+    .hstats__row { max-width: 1140px; margin: 0 auto; display: flex; justify-content: center; flex-wrap: wrap; }
+    .hsi { flex: 1; min-width: 130px; text-align: center; padding: .5rem 1rem; position: relative; }
+    .hsi + .hsi::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 1px; background: var(--h-stats-div); }
+    .hsi__val { font-size: 2rem; font-weight: 900; letter-spacing: -.04em; color: var(--h-stats-val); }
+    .hsi__val span { color: var(--gold-text); }
+    .hsi__lbl { font-size: .68rem; color: var(--h-stats-lbl); text-transform: uppercase; letter-spacing: .09em; margin-top: .15rem; font-weight: 600; }
+
+    /* ════════════════════════════════
+       SECTION BASE
+    ════════════════════════════════ */
+    .hsec { padding: 6rem 1.5rem; transition: background .3s; }
+    .hsec-a { background: var(--h-surface); }
+    .hsec-b { background: var(--h-bg); }
+    .hcon { max-width: 1140px; margin: 0 auto; }
+
+    .seye { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--gold-text); margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .seye::before { content: ''; display: block; width: 20px; height: 2px; background: var(--gold-text); border-radius: 2px; }
+    .stitle { font-size: clamp(1.75rem,3vw,2.5rem); font-weight: 900; letter-spacing: -.04em; line-height: 1.15; color: var(--h-text); margin-bottom: 1rem; }
+    .stitle .hl { color: var(--gold-text); }
+    .sdesc { font-size: .95rem; color: var(--h-muted); line-height: 1.75; max-width: 480px; }
+    .tc { text-align: center; }
+    .tc .seye { justify-content: center; }
+    .tc .seye::before { display: none; }
+    .tc .sdesc { margin: 0 auto; }
+
+    /* ════════════════════════════════
+       HOW IT WORKS
+    ════════════════════════════════ */
+    .tl { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: 4rem; position: relative; }
+    .tl::before { content: ''; position: absolute; top: 27px; left: 12%; right: 12%; height: 2px; background: linear-gradient(90deg,transparent,var(--h-tl-line) 20%,var(--h-tl-line) 80%,transparent); }
+    .tls { padding: 0 1rem; text-align: center; }
+    .tls__n { width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 1.5rem; background: linear-gradient(135deg,#F5C518,#D4A017); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 900; color: #0A0F1E; box-shadow: 0 0 0 6px rgba(245,197,24,.1), 0 4px 16px rgba(245,197,24,.25); position: relative; z-index: 1; }
+    .tls__title { font-size: .95rem; font-weight: 700; color: var(--h-text); margin-bottom: .5rem; }
+    .tls__desc  { font-size: .8rem; color: var(--h-tl-desc); line-height: 1.65; }
+
+    /* ════════════════════════════════
+       FEATURES
+    ════════════════════════════════ */
+    .fgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-top: 4rem; background: var(--h-border); border-radius: 20px; overflow: hidden; }
+    .fcard { background: var(--h-feat-bg); padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: .875rem; transition: background .2s, box-shadow .2s; }
+    .fcard:hover { background: var(--h-feat-hover); box-shadow: 0 4px 16px rgba(10,15,30,.08); }
+    .fcard__ico { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .fcard__title { font-size: .95rem; font-weight: 700; color: var(--h-text); }
+    .fcard__desc  { font-size: .82rem; color: var(--h-feat-desc); line-height: 1.7; }
+
+    /* ════════════════════════════════
+       PLATFORMS
+    ════════════════════════════════ */
+    .pgrid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 4rem; }
+
+    /* ── Platform cards — light elegant colors ── */
+    .plat {
+      border-radius: 24px; padding: 2.25rem; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 0;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+    }
+    .plat:hover { transform: translateY(-6px); }
+
+    /* YouTube — light red/cream */
+    .plat-yt {
+      background: linear-gradient(145deg, #FFF5F5 0%, #FFE8E8 60%, #FFDADA 100%);
+      border: 1.5px solid rgba(220,38,38,.15);
+      box-shadow: 0 8px 32px rgba(220,38,38,.1), 0 2px 8px rgba(220,38,38,.07);
+    }
+    .plat-yt:hover { box-shadow: 0 16px 48px rgba(220,38,38,.18), 0 4px 12px rgba(220,38,38,.1); }
+
+    /* Instagram — light purple/pink */
+    .plat-ig {
+      background: linear-gradient(145deg, #FAF5FF 0%, #FCE7F3 60%, #FDE8F0 100%);
+      border: 1.5px solid rgba(168,85,247,.15);
+      box-shadow: 0 8px 32px rgba(168,85,247,.1), 0 2px 8px rgba(219,39,119,.07);
+    }
+    .plat-ig:hover { box-shadow: 0 16px 48px rgba(168,85,247,.18), 0 4px 12px rgba(219,39,119,.1); }
+
+    /* dark mode: richer tones */
+    [data-theme="dark"] .plat-yt {
+      background: linear-gradient(145deg, #2D0A0A 0%, #3D0F0F 60%, #4A1515 100%);
+      border-color: rgba(220,38,38,.25);
+      box-shadow: 0 8px 32px rgba(220,38,38,.15);
+    }
+    [data-theme="dark"] .plat-yt:hover { box-shadow: 0 16px 48px rgba(220,38,38,.25); }
+    [data-theme="dark"] .plat-ig {
+      background: linear-gradient(145deg, #1A0A2E 0%, #2D1250 60%, #3D1A3A 100%);
+      border-color: rgba(168,85,247,.25);
+      box-shadow: 0 8px 32px rgba(168,85,247,.15);
+    }
+    [data-theme="dark"] .plat-ig:hover { box-shadow: 0 16px 48px rgba(168,85,247,.25); }
+
+    /* subtle dot pattern */
+    .plat::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(0,0,0,.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    [data-theme="dark"] .plat::before {
+      background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+    }
+
+    /* shine on hover */
+    .plat::after {
+      content: ''; position: absolute; top: -60%; left: -80%; width: 45%; height: 220%;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.18) 50%, transparent 60%);
+      transition: left .55s ease; pointer-events: none;
+    }
+    .plat:hover::after { left: 140%; }
+
+    /* glow orb */
+    .plat__glow {
+      position: absolute; width: 200px; height: 200px; border-radius: 50%;
+      filter: blur(55px); pointer-events: none; top: -40px; right: -40px; opacity: .35;
+    }
+    .plat-yt .plat__glow { background: #FF8080; }
+    .plat-ig .plat__glow { background: #D8A0F0; }
+    [data-theme="dark"] .plat-yt .plat__glow { background: #FF4444; opacity: .2; }
+    [data-theme="dark"] .plat-ig .plat__glow { background: #A855F7; opacity: .2; }
+
+    /* header: logo box + badge */
+    .plat__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; position: relative; z-index: 1; }
+
+    .plat-yt .plat__logo { background: rgba(220,38,38,.1); border: 1.5px solid rgba(220,38,38,.2); }
+    .plat-ig .plat__logo { background: rgba(168,85,247,.1); border: 1.5px solid rgba(168,85,247,.2); }
+    [data-theme="dark"] .plat-yt .plat__logo { background: rgba(220,38,38,.18); border-color: rgba(220,38,38,.3); }
+    [data-theme="dark"] .plat-ig .plat__logo { background: rgba(168,85,247,.18); border-color: rgba(168,85,247,.3); }
+
+    .plat__logo {
+      width: 54px; height: 54px; border-radius: 15px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+
+    .plat-yt .plat__badge { background: rgba(220,38,38,.1); color: #DC2626; border: 1px solid rgba(220,38,38,.2); }
+    .plat-ig .plat__badge { background: rgba(168,85,247,.1); color: #9333EA; border: 1px solid rgba(168,85,247,.2); }
+    [data-theme="dark"] .plat-yt .plat__badge { background: rgba(220,38,38,.15); color: #FCA5A5; border-color: rgba(220,38,38,.25); }
+    [data-theme="dark"] .plat-ig .plat__badge { background: rgba(168,85,247,.15); color: #D8B4FE; border-color: rgba(168,85,247,.25); }
+
+    .plat__badge {
+      border-radius: 9999px; padding: .25rem .8rem; font-size: .68rem;
+      font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* name + sub */
+    .plat-yt .plat__name { color: #991B1B; }
+    .plat-ig .plat__name { color: #6B21A8; }
+    [data-theme="dark"] .plat-yt .plat__name { color: #FCA5A5; }
+    [data-theme="dark"] .plat-ig .plat__name { color: #D8B4FE; }
+    .plat__name { font-size: 1.6rem; font-weight: 900; letter-spacing: -.03em; margin-bottom: .25rem; position: relative; z-index: 1; }
+
+    .plat-yt .plat__sub { color: rgba(153,27,27,.6); }
+    .plat-ig .plat__sub { color: rgba(107,33,168,.6); }
+    [data-theme="dark"] .plat-yt .plat__sub { color: rgba(252,165,165,.55); }
+    [data-theme="dark"] .plat-ig .plat__sub { color: rgba(216,180,254,.55); }
+    .plat__sub { font-size: .8rem; margin-bottom: 1.5rem; position: relative; z-index: 1; }
+
+    /* task chips */
+    .plat__tasks { display: flex; gap: .625rem; flex-wrap: wrap; margin-bottom: 1.75rem; position: relative; z-index: 1; }
+
+    .plat-yt .plat__task { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.18); color: #B91C1C; }
+    .plat-ig .plat__task { background: rgba(168,85,247,.08); border: 1px solid rgba(168,85,247,.18); color: #7E22CE; }
+    .plat-yt:hover .plat__task { background: rgba(220,38,38,.14); }
+    .plat-ig:hover .plat__task { background: rgba(168,85,247,.14); }
+    [data-theme="dark"] .plat-yt .plat__task { background: rgba(220,38,38,.15); border-color: rgba(220,38,38,.25); color: #FCA5A5; }
+    [data-theme="dark"] .plat-ig .plat__task { background: rgba(168,85,247,.15); border-color: rgba(168,85,247,.25); color: #D8B4FE; }
+
+    .plat__task {
+      display: inline-flex; align-items: center; gap: .4rem;
+      border-radius: 9999px; padding: .35rem .9rem;
+      font-size: .8rem; font-weight: 600; transition: background .2s;
+    }
+    .plat__task-icon { font-size: .9rem; }
+
+    /* description */
+    .plat-yt .plat__desc { color: rgba(127,29,29,.65); }
+    .plat-ig .plat__desc { color: rgba(88,28,135,.65); }
+    [data-theme="dark"] .plat-yt .plat__desc { color: rgba(252,165,165,.55); }
+    [data-theme="dark"] .plat-ig .plat__desc { color: rgba(216,180,254,.55); }
+    .plat__desc { font-size: .875rem; line-height: 1.7; margin-bottom: 1.75rem; position: relative; z-index: 1; flex: 1; }
+
+    /* CTA */
+    .plat-yt .plat__cta { background: rgba(220,38,38,.1); border: 1.5px solid rgba(220,38,38,.2); color: #B91C1C; }
+    .plat-yt .plat__cta:hover { background: rgba(220,38,38,.18); }
+    .plat-ig .plat__cta { background: rgba(168,85,247,.1); border: 1.5px solid rgba(168,85,247,.2); color: #7E22CE; }
+    .plat-ig .plat__cta:hover { background: rgba(168,85,247,.18); }
+    [data-theme="dark"] .plat-yt .plat__cta { background: rgba(220,38,38,.18); border-color: rgba(220,38,38,.3); color: #FCA5A5; }
+    [data-theme="dark"] .plat-ig .plat__cta { background: rgba(168,85,247,.18); border-color: rgba(168,85,247,.3); color: #D8B4FE; }
+
+    .plat__cta {
+      display: inline-flex; align-items: center; gap: .4rem;
+      border-radius: 10px; padding: .65rem 1.25rem;
+      font-size: .85rem; font-weight: 700; text-decoration: none;
+      transition: background .2s, gap .2s; width: fit-content;
+      position: relative; z-index: 1;
+    }
+    .plat__cta:hover { gap: .65rem; text-decoration: none; }
+
+    /* ════════════════════════════════
+       COIN ECONOMY
+    ════════════════════════════════ */
+    .econ-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 4rem; }
+    .etitle { font-size: clamp(1.75rem,3vw,2.5rem); font-weight: 900; letter-spacing: -.04em; line-height: 1.15; margin-bottom: 1rem; color: var(--h-econ-text); }
+    .etitle .hl { color: var(--gold-text); }
+    .edesc { font-size: .9rem; color: var(--h-econ-sub); line-height: 1.75; margin-bottom: 2rem; }
+    .elist { display: flex; flex-direction: column; gap: .75rem; }
+    .eitem { display: flex; align-items: center; gap: 1rem; background: var(--h-eitem-bg); border: 1px solid var(--h-eitem-border); border-radius: 12px; padding: 1rem 1.25rem; transition: background .2s, border-color .2s; }
+    .eitem:hover { background: var(--h-eitem-hover); border-color: rgba(245,197,24,.2); }
+    .eitem__ico { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .eitem__lbl { font-size: .875rem; color: var(--h-eitem-label); flex: 1; }
+    .eitem__val { font-size: .85rem; font-weight: 700; color: var(--gold-text); white-space: nowrap; }
+
+    /* ════════════════════════════════
+       CTA
+    ════════════════════════════════ */
+    .ctasec { padding: 6rem 1.5rem; text-align: center; background: var(--h-bg); transition: background .3s; }
+    .ctabox { background: var(--h-cta-box); border: 1px solid var(--h-cta-box-border); border-radius: 28px; padding: 4rem 3rem; max-width: 680px; margin: 0 auto; box-shadow: 0 0 80px rgba(245,197,24,.06); }
+    .ctatitle { font-size: clamp(1.75rem,3.5vw,2.75rem); font-weight: 900; letter-spacing: -.04em; margin-bottom: .875rem; color: var(--h-text); }
+    .ctatitle .hl { color: var(--gold-text); }
+    .ctasub { font-size: .95rem; color: var(--h-muted); margin-bottom: 2.5rem; line-height: 1.7; }
+    .ctaacts { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    .hfoot { background: var(--h-footer-bg); border-top: 1px solid var(--h-border); padding: 3rem 1.5rem 2rem; transition: background .3s; }
+    .hfoot__inner { max-width: 1140px; margin: 0 auto; }
+    .hfoot__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hfoot__brand { max-width: 260px; }
+    .hfoot__logo { display: flex; align-items: center; gap: .5rem; font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: .75rem; }
+    .hfoot__logo-ico { width: 28px; height: 28px; border-radius: 7px; background: linear-gradient(135deg,#F5C518,#D4A017); display: flex; align-items: center; justify-content: center; font-size: .85rem; }
+    .hfoot__tag { font-size: .8rem; color: var(--h-footer-text); line-height: 1.6; }
+    .hfoot__nav { display: flex; gap: 3rem; flex-wrap: wrap; }
+    .hfoot__col h4 { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--h-footer-head); margin-bottom: .875rem; }
+    .hfoot__col a { display: block; font-size: .82rem; color: var(--h-footer-link); margin-bottom: .4rem; transition: color .2s; }
+    .hfoot__col a:hover { color: #fff; text-decoration: none; }
+    .hfoot__bottom { border-top: 1px solid rgba(255,255,255,.07); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; }
+    .hfoot__copy { font-size: .75rem; color: var(--h-footer-copy); }
+    .hfoot__badges { display: flex; gap: .5rem; }
+    .hfoot__badge { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: .2rem .6rem; border-radius: 4px; background: var(--h-footer-badge); color: rgba(255,255,255,.35); }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 900px) {
+      .tl  { grid-template-columns: repeat(2,1fr); gap: 2.5rem; }
+      .tl::before { display: none; }
+      .fgrid { grid-template-columns: repeat(2,1fr); }
+      .econ-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 640px) {
+      .hn__links { display: none; }
+      .hero { padding: 6rem 1rem 4rem; }
+      .pcard { flex-direction: column; text-align: center; padding: 1.5rem; }
+      .pcard__coins { margin: .4rem auto 0; }
+      .pcard__acts  { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .tl  { grid-template-columns: 1fr; }
+      .fgrid { grid-template-columns: 1fr; }
+      .pgrid { grid-template-columns: 1fr; }
+      .ctabox { padding: 2.5rem 1.5rem; }
+      .hfoot__top { flex-direction: column; gap: 2rem; }
+      .hfoot__bottom { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .hcta { flex-direction: column; align-items: center; }
+      .hsi + .hsi::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="hn" id="hn">
+    <div class="hn__inner">
+      <a href="/" class="hn__logo">
+        <div class="hn__logo-box">&#x1FA99;</div>
+        CoinBoost
+      </a>
+      <div class="hn__links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#platforms">Platforms</a>
+      </div>
+      <div class="hn__right">
+        <!-- Theme toggle -->
+        <button class="hn__toggle theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <svg class="ti-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="ti-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <% if (user) { %>
+          <span class="hcoin">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            <%= user.coins %> coins
+          </span>
+          <a href="/dashboard" class="hbtn hbtn-gold hbtn-sm">Dashboard</a>
+        <% } else { %>
+          <a href="/login" class="hbtn hbtn-ghost hbtn-sm">Sign In</a>
+          <a href="/login" class="hbtn hbtn-gold hbtn-sm">Get Started</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="hero__mesh"></div>
+    <div class="hero__glow"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero__inner">
+      <div class="htag">
+        <span class="htag-dot"></span>
+        100% Free &nbsp;&middot;&nbsp; No Ads &nbsp;&middot;&nbsp; No Password
+      </div>
+
+      <h1 class="htitle">
+        Grow Your<br>
+        <span class="grad">YouTube &amp; Instagram</span><br>
+        Together
+      </h1>
+      <p class="hsub">A free community-powered engagement exchange. Earn coins by helping others grow. Spend them to boost your own content.</p>
+
+      <% if (user) { %>
+        <div style="display:flex;justify-content:center">
+          <div class="pcard">
+            <div class="pcard__av"><%= user.username.charAt(0) %></div>
+            <div class="pcard__body">
+              <div class="pcard__name">@<%= user.username %></div>
+              <div class="pcard__plat"><%= user.platform === 'youtube' ? '▶ YouTube' : '📸 Instagram' %> account</div>
+              <div class="pcard__coins">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                <%= user.coins %> coins
+              </div>
+            </div>
+            <div class="pcard__acts">
+              <a href="/earn"      class="hbtn hbtn-gold hbtn-sm">Earn Coins</a>
+              <a href="/boost"     class="hbtn hbtn-ghost hbtn-sm">Boost</a>
+              <a href="/dashboard" class="hbtn hbtn-ghost hbtn-sm">Dashboard</a>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="hcta">
+          <a href="/login" class="hbtn hbtn-gold hbtn-lg">Start for Free &rarr;</a>
+          <a href="#how-it-works" class="hbtn hbtn-ghost hbtn-lg">See How It Works</a>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="hscroll">
+      <div class="hscroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- ══ STATS ══ -->
+  <div class="hstats">
+    <div class="hstats__row">
+      <div class="hsi"><div class="hsi__val"><span>100</span>%</div><div class="hsi__lbl">Free Forever</div></div>
+      <div class="hsi"><div class="hsi__val"><span>0</span></div><div class="hsi__lbl">Advertisements</div></div>
+      <div class="hsi"><div class="hsi__val"><span>20</span></div><div class="hsi__lbl">Free Starter Coins</div></div>
+      <div class="hsi"><div class="hsi__val"><span>8</span>s</div><div class="hsi__lbl">Verified Engagement</div></div>
+      <div class="hsi"><div class="hsi__val"><span>2</span></div><div class="hsi__lbl">Platforms</div></div>
+    </div>
+  </div>
+
+  <!-- ══ HOW IT WORKS ══ -->
+  <section class="hsec hsec-a" id="how-it-works">
+    <div class="hcon">
+      <div class="tc">
+        <div class="seye">Simple Process</div>
+        <h2 class="stitle">How <span class="hl">CoinBoost</span> Works</h2>
+        <p class="sdesc">Four easy steps. Completely free. No credit card, no password, no catch.</p>
+      </div>
+      <div class="tl">
+        <div class="tls"><div class="tls__n">1</div><div class="tls__title">Sign In — No Password</div><div class="tls__desc">Enter your Instagram handle or YouTube URL. Get 20 free coins instantly.</div></div>
+        <div class="tls"><div class="tls__n">2</div><div class="tls__title">Browse Tasks</div><div class="tls__desc">See campaigns from other creators. Like, follow, or subscribe to earn coins.</div></div>
+        <div class="tls"><div class="tls__n">3</div><div class="tls__title">Get Verified</div><div class="tls__desc">Stay on the link for 8 seconds. Our focus tracker confirms you completed it.</div></div>
+        <div class="tls"><div class="tls__n">4</div><div class="tls__title">Boost Yourself</div><div class="tls__desc">Spend your coins to send real engagement to your own content.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ══ -->
+  <section class="hsec hsec-b" id="features">
+    <div class="hcon">
+      <div class="tc">
+        <div class="seye">Platform Features</div>
+        <h2 class="stitle">Everything You Need.<br><span class="hl">Nothing You Don't.</span></h2>
+        <p class="sdesc">Built for creators who want real growth — without the noise, cost, or compromise.</p>
+      </div>
+      <div class="fgrid">
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(16,185,129,.12)">🔒</div><div class="fcard__title">Passwordless Login</div><div class="fcard__desc">Just your social handle. No passwords, emails, or private data ever leave your device.</div></div>
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(245,197,24,.1)">⏱</div><div class="fcard__title">8-Second Verification</div><div class="fcard__desc">Smart focus tracking ensures every task is genuinely completed — zero fake engagements.</div></div>
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(245,197,24,.1)">🪙</div><div class="fcard__title">Free Coin Economy</div><div class="fcard__desc">Earn coins by helping others, spend to grow yourself. No purchases. No pay-to-win.</div></div>
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(239,68,68,.1)">🚫</div><div class="fcard__title">Zero Advertisements</div><div class="fcard__desc">100% ad-free. No banners, no pop-ups, no trackers — just a clean platform.</div></div>
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(139,92,246,.1)">🛡</div><div class="fcard__title">Anti-Cheat System</div><div class="fcard__desc">Rate limiting, duplicate prevention, and server-side time verification keep it fair.</div></div>
+        <div class="fcard"><div class="fcard__ico" style="background:rgba(59,130,246,.1)">📱</div><div class="fcard__title">Fully Responsive</div><div class="fcard__desc">Works flawlessly on any device — mobile, tablet, or desktop. Earn anywhere.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PLATFORMS ══ -->
+  <section class="hsec hsec-a" id="platforms">
+    <div class="hcon">
+      <div class="seye">Supported Platforms</div>
+      <h2 class="stitle">YouTube &amp; <span class="hl">Instagram</span> Growth</h2>
+      <p class="sdesc">Two of the world's biggest platforms, fully supported with platform-specific task types.</p>
+      <div class="pgrid">
+        <!-- YouTube -->
+        <div class="plat plat-yt">
+          <div class="plat__glow"></div>
+          <div class="plat__head">
+            <div class="plat__logo">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#DC2626"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <span class="plat__badge">✦ Active</span>
+          </div>
+          <div class="plat__name">YouTube</div>
+          <div class="plat__sub">Grow your channel & videos</div>
+          <div class="plat__tasks">
+            <span class="plat__task"><span class="plat__task-icon">❤️</span> Like</span>
+            <span class="plat__task"><span class="plat__task-icon">🔔</span> Subscribe</span>
+          </div>
+          <div class="plat__desc">Boost your subscriber count and video likes. Paste any YouTube video, channel, or Shorts link and let the community help you grow.</div>
+          <a href="<%= user ? '/boost' : '/login' %>" class="plat__cta">
+            Start Campaign
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Instagram -->
+        <div class="plat plat-ig">
+          <div class="plat__glow"></div>
+          <div class="plat__head">
+            <div class="plat__logo">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#9333EA"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.98 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <span class="plat__badge">✦ Active</span>
+          </div>
+          <div class="plat__name">Instagram</div>
+          <div class="plat__sub">Grow your profile & reels</div>
+          <div class="plat__tasks">
+            <span class="plat__task"><span class="plat__task-icon">❤️</span> Like</span>
+            <span class="plat__task"><span class="plat__task-icon">👥</span> Follow</span>
+          </div>
+          <div class="plat__desc">Get real likes on your reels and posts, or grow your follower count. Works with any public Instagram profile or post URL.</div>
+          <a href="<%= user ? '/boost' : '/login' %>" class="plat__cta">
+            Start Campaign
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COIN ECONOMY ══ -->
+  <section class="hsec hsec-b">
+    <div class="hcon">
+      <div class="econ-wrap">
+        <div>
+          <div class="seye">The Coin System</div>
+          <div class="etitle">Earn coins.<br><span class="hl">Spend them.</span> Grow.</div>
+          <div class="edesc">Every action uses coins — a fair internal currency that keeps the platform balanced. Nobody can buy their way ahead.</div>
+          <% if (!user) { %>
+            <a href="/login" class="hbtn hbtn-gold">Join Free &rarr;</a>
+          <% } else { %>
+            <a href="/earn"  class="hbtn hbtn-gold">Earn More Coins &rarr;</a>
+          <% } %>
+        </div>
+        <div class="elist">
+          <div class="eitem"><div class="eitem__ico" style="background:rgba(245,197,24,.1)">🎁</div><span class="eitem__lbl">Welcome bonus on signup</span><span class="eitem__val">+20</span></div>
+          <div class="eitem"><div class="eitem__ico" style="background:rgba(255,0,0,.1)">▶</div><span class="eitem__lbl">Subscribe to YouTube channel</span><span class="eitem__val">Earn</span></div>
+          <div class="eitem"><div class="eitem__ico" style="background:rgba(239,68,68,.1)">❤️</div><span class="eitem__lbl">Like a video or post</span><span class="eitem__val">Earn</span></div>
+          <div class="eitem"><div class="eitem__ico" style="background:rgba(220,39,67,.1)">👥</div><span class="eitem__lbl">Follow on Instagram</span><span class="eitem__val">Earn</span></div>
+          <div class="eitem"><div class="eitem__ico" style="background:rgba(59,130,246,.1)">🚀</div><span class="eitem__lbl">Create a boost campaign</span><span class="eitem__val">Spend</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA (guests only) ══ -->
+  <% if (!user) { %>
+  <section class="ctasec">
+    <div class="ctabox">
+      <div class="ctatitle">Ready to grow your<br><span class="hl">audience for free?</span></div>
+      <div class="ctasub">No credit card. No password. Just your handle and 20 starter coins — right now.</div>
+      <div class="ctaacts">
+        <a href="/login" class="hbtn hbtn-gold hbtn-lg">Get Started — It's Free 🚀</a>
+        <a href="#how-it-works" class="hbtn hbtn-ghost hbtn-lg">Learn More</a>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="hfoot">
+    <div class="hfoot__inner">
+      <div class="hfoot__top">
+        <div class="hfoot__brand">
+          <div class="hfoot__logo"><div class="hfoot__logo-ico">&#x1FA99;</div>CoinBoost</div>
+          <div class="hfoot__tag">Free &middot; Ad-Free &middot; Community-Powered social media engagement exchange.</div>
+        </div>
+        <div class="hfoot__nav">
+          <div class="hfoot__col">
+            <h4>Platform</h4>
+            <a href="/earn">Earn Coins</a>
+            <a href="/boost">Boost Account</a>
+            <a href="/orders">My Orders</a>
+            <a href="/dashboard">Dashboard</a>
+          </div>
+          <div class="hfoot__col">
+            <h4>Learn</h4>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#features">Features</a>
+            <a href="#platforms">Platforms</a>
+          </div>
+          <div class="hfoot__col">
+            <h4>Account</h4>
+            <% if (user) { %>
+              <a href="/dashboard">Dashboard</a>
+              <a href="#" onclick="event.preventDefault();document.getElementById('flogout').submit()">Logout</a>
+              <form id="flogout" action="/logout" method="POST" style="display:none"></form>
+            <% } else { %>
+              <a href="/login">Sign In</a>
+              <a href="/login">Create Account</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="hfoot__bottom">
+        <div class="hfoot__copy">&copy; <%= new Date().getFullYear() %> CoinBoost. All rights reserved.</div>
+        <div class="hfoot__badges">
+          <span class="hfoot__badge">Free</span>
+          <span class="hfoot__badge">No Ads</span>
+          <span class="hfoot__badge">No Password</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll glass effect
+    var hn = document.getElementById('hn');
+    window.addEventListener('scroll', function () {
+      hn.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+  </script>
+</body>
+</html>
