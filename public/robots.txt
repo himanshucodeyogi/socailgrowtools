@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /earn
+Disallow: /boost
+Disallow: /orders
+Disallow: /logout
+
+Sitemap: https://socialgrowtools.indevs.in/sitemap.xml

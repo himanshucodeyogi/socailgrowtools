@@ -1,8 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CoinBoost — Free Social Media Growth Exchange</title>
+  <title>SocialGrowTools — Free Social Media Growth Exchange India</title>
+  <% var metaTitle = 'SocialGrowTools — Free Social Media Growth Exchange India'; %>
+  <% var metaDesc = 'SocialGrowTools is a free P2P social media engagement exchange. Earn coins by completing tasks, boost your YouTube & Instagram for free. No password, no ads, 100% free in India.'; %>
+  <% var canonical = 'https://socialgrowtools.indevs.in'; %>
   <%- include('partials/head') %>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SocialGrowTools",
+    "url": "https://socialgrowtools.indevs.in",
+    "description": "Free P2P social media engagement exchange for YouTube and Instagram growth in India.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://socialgrowtools.indevs.in/login",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SocialGrowTools",
+    "url": "https://socialgrowtools.indevs.in",
+    "logo": "https://socialgrowtools.indevs.in/logo.png",
+    "description": "Free social media growth tools platform for YouTube and Instagram users in India.",
+    "sameAs": []
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SocialGrowTools",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "description": "Free P2P social media engagement exchange. Earn coins, boost YouTube & Instagram.",
+    "url": "https://socialgrowtools.indevs.in"
+  }
+  </script>
   <style>
     /* ── Home page inherits global vars from style.css ── */
 
@@ -524,8 +570,8 @@
   <nav class="hn" id="hn">
     <div class="hn__inner">
       <a href="/" class="hn__logo">
-        <div class="hn__logo-box">&#x1FA99;</div>
-        CoinBoost
+        <img src="/logo.png" alt="SocialGrowTools Logo" width="34" height="34" style="border-radius:9px;object-fit:contain;" />
+        SocialGrowTools
       </a>
       <div class="hn__links">
         <a href="#how-it-works">How it works</a>
@@ -769,7 +815,7 @@
     <div class="hfoot__inner">
       <div class="hfoot__top">
         <div class="hfoot__brand">
-          <div class="hfoot__logo"><div class="hfoot__logo-ico">&#x1FA99;</div>CoinBoost</div>
+          <div class="hfoot__logo"><img src="/logo.png" alt="SocialGrowTools" width="28" height="28" style="border-radius:7px;object-fit:contain;" />SocialGrowTools</div>
           <div class="hfoot__tag">Free &middot; Ad-Free &middot; Community-Powered social media engagement exchange.</div>
         </div>
         <div class="hfoot__nav">
@@ -800,7 +846,7 @@
         </div>
       </div>
       <div class="hfoot__bottom">
-        <div class="hfoot__copy">&copy; <%= new Date().getFullYear() %> CoinBoost. All rights reserved.</div>
+        <div class="hfoot__copy">&copy; <%= new Date().getFullYear() %> SocialGrowTools. All rights reserved.</div>
         <div class="hfoot__badges">
           <span class="hfoot__badge">Free</span>
           <span class="hfoot__badge">No Ads</span>
