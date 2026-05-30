@@ -29,9 +29,32 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
         <%= user.coins %>
       </span>
-      <form action="/logout" method="POST" style="display:inline">
+      <form action="/logout" method="POST" style="display:inline" class="navbar__logout">
         <button type="submit" class="btn btn-outline btn-sm">Logout</button>
+      </form>
+
+      <!-- Hamburger button — mobile only -->
+      <button class="navbar__hamburger" id="nav-hamburger" aria-label="Toggle menu" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile dropdown menu -->
+  <div class="navbar__mobile-menu" id="nav-mobile-menu">
+    <a href="/earn"   class="<%= typeof activePage !== 'undefined' && activePage === 'earn'   ? 'active' : '' %>">Earn Coins</a>
+    <a href="/boost"  class="<%= typeof activePage !== 'undefined' && activePage === 'boost'  ? 'active' : '' %>">Boost</a>
+    <a href="/orders" class="<%= typeof activePage !== 'undefined' && activePage === 'orders' ? 'active' : '' %>">My Orders</a>
+    <div class="navbar__mobile-footer">
+      <form action="/logout" method="POST">
+        <button type="submit" class="btn btn-outline btn-sm btn-full">Logout</button>
       </form>
     </div>
   </div>
 </nav>
+<script>
+function toggleMobileNav() {
+  document.getElementById('nav-mobile-menu').classList.toggle('open');
+  document.getElementById('nav-hamburger').classList.toggle('open');
+}
+</script>

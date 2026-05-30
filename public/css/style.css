@@ -120,12 +120,11 @@ ul, ol { list-style: none; }
 .navbar {
   background: var(--nav-bg);
   position: sticky; top: 0; z-index: 100;
-  height: 64px;
   box-shadow: 0 2px 16px rgba(0,0,0,.25);
   transition: background var(--t);
 }
 .navbar__inner {
-  display: flex; align-items: center; justify-content: space-between; height: 100%;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
 }
 .navbar__logo {
   display: flex; align-items: center; gap: .5rem;
@@ -476,20 +475,69 @@ ul, ol { list-style: none; }
 .modal__close:hover { color: var(--text); }
 
 /* ============================================================
+   Mobile Navigation Hamburger
+   ============================================================ */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-md); cursor: pointer;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.navbar__hamburger span {
+  display: block; width: 18px; height: 2px;
+  background: rgba(255,255,255,.8); border-radius: 2px;
+  transition: transform var(--t), opacity var(--t);
+}
+.navbar__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.navbar__hamburger.open span:nth-child(2) { opacity: 0; }
+.navbar__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.navbar__mobile-menu {
+  display: none; flex-direction: column;
+  background: var(--nav-bg);
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.navbar__mobile-menu.open { display: flex; animation: slideDown .2s ease; }
+@keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.navbar__mobile-menu a {
+  padding: .9rem 1.5rem; font-size: .95rem; font-weight: 500;
+  color: var(--nav-text); border-bottom: 1px solid rgba(255,255,255,.05);
+  transition: color var(--t), background var(--t);
+}
+.navbar__mobile-menu a:hover,
+.navbar__mobile-menu a.active {
+  color: var(--nav-active); background: rgba(255,255,255,.06); text-decoration: none;
+}
+.navbar__mobile-footer { padding: .9rem 1.5rem; }
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 768px) {
+  /* Layout */
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .boost-layout { grid-template-columns: 1fr; }
-  .boost-info { display: none; }
   .page-header { flex-direction: column; align-items: flex-start; }
   .hero-balance { font-size: 2.25rem; }
   .modal__actions { flex-direction: column; }
   .task-grid { grid-template-columns: 1fr; }
+  /* Navbar — hamburger at 768px so tablets also get the menu */
+  .navbar__links { display: none; }
+  .navbar__logout { display: none !important; }
+  .navbar__hamburger { display: flex; }
 }
 @media (max-width: 480px) {
-  .navbar__links { display: none; }
   .container { padding: 0 1rem; }
   .hero-card { padding: 2rem 1.25rem; }
   .card { padding: 1.25rem; }
+  .stat-card__value { font-size: 1.6rem; }
+  .page-title { font-size: 1.4rem; }
+  .hero-balance { font-size: 2rem; }
+  .btn-lg { padding: .7rem 1.25rem; }
+  /* Compact coin badge so it never overflows on narrow screens */
+  .coin-badge { font-size: .78rem; padding: .2rem .6rem; }
+  .navbar__logo { font-size: 1.05rem; }
 }

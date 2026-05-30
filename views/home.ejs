@@ -457,6 +457,7 @@
     }
     @media (max-width: 640px) {
       .hn__links { display: none; }
+      .hn__hamburger { display: flex; }
       .hero { padding: 6rem 1rem 4rem; }
       .pcard { flex-direction: column; text-align: center; padding: 1.5rem; }
       .pcard__coins { margin: .4rem auto 0; }
@@ -471,7 +472,50 @@
     @media (max-width: 480px) {
       .hcta { flex-direction: column; align-items: center; }
       .hsi + .hsi::before { display: none; }
+      .hsub { font-size: .95rem; }
+      .htag { font-size: .65rem; }
+      .ctabox { padding: 2rem 1.25rem; }
+      /* Hide secondary nav buttons so right side doesn't overflow */
+      .hn__right .hbtn-ghost { display: none; }
+      .hn__right .hcoin { display: none; }
+      .hn__logo { font-size: 1rem; }
     }
+
+    /* ── Home page hamburger ── */
+    .hn__hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      width: 36px; height: 36px;
+      background: var(--h-ghost-bg); border: 1px solid var(--h-ghost-border);
+      border-radius: 8px; cursor: pointer;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .hn__hamburger span {
+      display: block; width: 18px; height: 2px;
+      background: var(--h-nav-text); border-radius: 2px;
+      transition: transform .2s, opacity .2s;
+    }
+    .hn__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hn__hamburger.open span:nth-child(2) { opacity: 0; }
+    .hn__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Home mobile dropdown ── */
+    .hn__mobile-menu {
+      display: none; flex-direction: column;
+      background: var(--h-bg);
+      border-top: 1px solid var(--h-nav-border);
+    }
+    .hn__mobile-menu.open { display: flex; animation: slideDown .2s ease; }
+    .hn__mobile-menu a {
+      padding: .9rem 1.5rem; font-size: .95rem; font-weight: 500;
+      color: var(--h-nav-text); border-bottom: 1px solid var(--h-nav-border);
+      transition: color .2s, background .2s;
+    }
+    .hn__mobile-menu a:hover {
+      color: var(--h-nav-hover); background: rgba(10,15,30,.04); text-decoration: none;
+    }
+    [data-theme="dark"] .hn__mobile-menu a:hover { background: rgba(255,255,255,.05); }
   </style>
 </head>
 <body>
@@ -512,7 +556,17 @@
           <a href="/login" class="hbtn hbtn-ghost hbtn-sm">Sign In</a>
           <a href="/login" class="hbtn hbtn-gold hbtn-sm">Get Started</a>
         <% } %>
+        <!-- Hamburger — mobile only -->
+        <button class="hn__hamburger" id="hn-hamburger" aria-label="Toggle menu" onclick="toggleHomeNav()">
+          <span></span><span></span><span></span>
+        </button>
       </div>
+    </div>
+    <!-- Mobile nav dropdown -->
+    <div class="hn__mobile-menu" id="hn-mobile-menu">
+      <a href="#how-it-works" onclick="closeHomeNav()">How it works</a>
+      <a href="#features" onclick="closeHomeNav()">Features</a>
+      <a href="#platforms" onclick="closeHomeNav()">Platforms</a>
     </div>
   </nav>
 
@@ -762,6 +816,15 @@
     window.addEventListener('scroll', function () {
       hn.classList.toggle('scrolled', window.scrollY > 30);
     }, { passive: true });
+
+    function toggleHomeNav() {
+      document.getElementById('hn-mobile-menu').classList.toggle('open');
+      document.getElementById('hn-hamburger').classList.toggle('open');
+    }
+    function closeHomeNav() {
+      document.getElementById('hn-mobile-menu').classList.remove('open');
+      document.getElementById('hn-hamburger').classList.remove('open');
+    }
   </script>
 </body>
 </html>
